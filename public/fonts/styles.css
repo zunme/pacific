@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+@font-face {
+    font-family: 'NEXON Lv2';
+    font-weight: 600;
+    src: url(./NEXON-Lv2-Gothic-Bold.eot) format('eot'),
+    url(./NEXON-Lv2-Gothic-Bold.woff) format('woff'),
+    url(./NEXON-Lv2-Gothic-Bold.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'NEXON Lv2';
+    font-weight: 500;
+    src: url(./NEXON-Lv2-Gothic-Medium.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'NEXON Lv2';
+    font-weight: 400;
+    src: url(./NEXON-Lv2-Gothic.eot) format('eot'),
+    url(./NEXON-Lv2-Gothic.woff) format('woff'),
+    url(./NEXON-Lv2-Gothic.otf) format('opentype');
+}
+
+@font-face {
+    font-family: 'NEXON Lv2';
+    font-weight: 300;
+    src: url(./NEXON-Lv2-Gothic-Light.eot) format('eot'),
+    url(./NEXON-Lv2-Gothic-Light.woff) format('woff'),
+    url(./NEXON-Lv2-Gothic-Light.otf) format('opentype');
+}
