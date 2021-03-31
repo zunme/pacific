@@ -226,8 +226,13 @@ class ProductController extends Controller
     }
     
     $saleNeedPoint =  $salelistModule->needPoint($user->id);
-    $saleList = $salelistModule->userSaleAvaiInfo($user->id) ;
-    dd( $saleList);
+    $saleListInfo = $salelistModule->userSaleAvaiInfo($user->id) ;
+    
+    $tmp =[];
+    foreach( $saleListInfo as $row) {
+      $tmp['p'.$row->product_id] = $row['cnt'];
+    }
+    
     $products = \DB::select("
         SELECT 
           products.*,
@@ -249,6 +254,11 @@ class ProductController extends Controller
         ) tmp2 ON products.id = tmp2.product_id
         WHERE is_use ='Y'  
     "); 
+    foreach( $products as &$product ){
+      if( isset($tmp['p'. $product->id]) ) {
+        $product->reserv = $tmp['p'.$product->id];
+      }
+    }
     return view('salelist', compact(['user','products','siteconfig']));
   }
   function saleHistory (Request $request){
@@ -257,14 +267,15 @@ class ProductController extends Controller
     
     $types= config('sitedata.tadting_types');
     if( $request->page < 2){
-      $reservedata = [];
+      $salelistModule =new salelistModule();
+      $reservedata =  $salelistModule->salelist($user->id) ;
+      
     } else $reservedata = [];
     $data = Trading:: select( 'tradings.*', 'products.product_name')
         ->join('products', 'tradings.product_id','=','products.id')
         ->where('seller_user_id', $user->id)->where('trading_status','!=','N')
         ->latest()->paginate(2);
-    return view('salehistory', compact(['data','types','reservedata','siteconfig']));
-    //return $this->success( $data );
+    return view('salehistory', compact(['data','types','reservedata','siteconfig',]));
   }
   function saleDetail (Request $request, $trading_code){
     $user = Auth::user();

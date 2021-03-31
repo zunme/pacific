@@ -11,10 +11,10 @@
                 <tbody>
                   @foreach ( $reservedata as $r_row)
                   <tr>
-                    <td>{{$r_row->updated_at->format('Y.m.d')}}</td>
+                    <td>{{$r_row->saledate}}</td>
                     <td><span class="text-danger">판매</span></td>
                     <td>{{$r_row->product_name}}</td>
-                    <td>{{ $types[ $r_row->reservation_status ]}}</td>
+                    <td>판매</td>
                   </tr>
                   @endforeach
                   @foreach ( $data as $row)
