@@ -59,8 +59,8 @@ class ProductController extends Controller
   }
   function salelist(Request $request){
     $salelistModule =new salelistModule();
-    $data =  $salelistModule->salelist() ;
-    
+    $data =  $salelistModule->salelist(null,$request->product_id,false) ;
+ 
    return Datatables::of($data)
             ->make(true); 
   }

@@ -47,7 +47,7 @@ class salelistModule {
     return ( $infolist->get() );  
   }
   /* 가능 상품 리스트 */
-  function salelist( $user_id = null, $returnlist = true ){
+  function salelist( $user_id = null, $product_id = null,$returnlist = true ){
     $siteconfig = SiteConfig::first();
     $sub = $this->needPointQry($user_id);
     if( $user_id =='ALL') $user_id = null;
@@ -77,6 +77,7 @@ class salelistModule {
               ;      
           });
     if( $user_id ) $listsub->where( 'user_id', $user_id);
+    if( $product_id ) $listsub->where( 'product_id', $product_id);
     $list = DB::table ( DB::raw("({$listsub->toSql()}) as fromtmp") )->select(DB::raw("concat(user_id,'_',product_id) as id"),'user_id', 'phone', 'point', 'saledate', 'product_id', 'product_name' , DB::raw("COUNT(1) AS amount")
 	, DB::raw( "CAST( SUM( sell_price* fee ) /100 /100 AS DECIMAL(10,1) ) AS fee") )->groupByRaw('user_id, saledate, product_id')->orderByRaw('saledate asc, point DESC, user_id asc') ;
     $list->mergeBindings( $listsub );

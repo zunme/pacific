@@ -107,6 +107,7 @@
   }
   function reloadtable() {
     reserv.ajax.reload(null, false);
+    saletable.ajax.reload(null, false);
   }
   
   $(document).ready(function() {
@@ -115,6 +116,7 @@
         "processing": true,
         "serverSide": true,
         "lengthMenu": [10],
+
         "order": [[ 0, "desc" ]],
         "ajax": {
           'url' : ajaxUrl ,
@@ -192,10 +194,14 @@ saletable = $('#saletable').DataTable({
         "processing": true,
         "serverSide": true,
         "lengthMenu": ['All'],
-        //"order": [[ 0, "desc" ]],
+        "order": [[ 5, "asc" ]],
+        "scrollY": 200,
+        "scrollCollapse": true,
+        "paging": false,
         "ajax": {
           'url' : "/adm/reservation/salelist" ,
           'data' : function (data){
+            data.product_id = $("#product_id").val();
           }
         },
         "columnDefs": [
@@ -204,7 +210,7 @@ saletable = $('#saletable').DataTable({
           {"targets": [ 2 ],"searchable": true,"sortable":true, className:'text-center'},
           {"targets": [ 3 ],"searchable": false,"sortable":true, className:'text-center'},
           {"targets": [ 4 ],"searchable": false,"sortable":true, className:'text-center'},
-          {"targets": [ 5 ],"searchable": false,"sortable":false, className:'text-center'},
+          {"targets": [ 5 ],"searchable": false,"sortable":true, className:'text-center'},
           {"targets": [ 6 ],"searchable": false,"sortable":false, className:'text-center'},
           {"targets": [ 7 ],"searchable": false,"sortable":false, className:'text-center'},
         ],
