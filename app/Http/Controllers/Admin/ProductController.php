@@ -24,7 +24,7 @@ use App\Models\Product;
 use App\Models\ProductItem;
 use App\Models\BuyReservation;
 use App\Models\Trading;
-
+use App\Modules\salelistModule;
 
 class ProductController extends Controller
 {
@@ -34,6 +34,7 @@ class ProductController extends Controller
     $products = Product::where('is_use','Y')->get();
     return view('admin.reservation', compact(['siteconfig','products']));
   }
+  
   function reservationList (Request $request){
     $data = BuyReservation::
             select('buy_reservations.id', 'buy_reservations.user_id','buy_reservations.amount','buy_reservations.reservation_status','buy_reservations.created_at',
@@ -55,6 +56,13 @@ class ProductController extends Controller
                 //->with(['today'=>Carbon::now()->format('Y-m-d')])
                 ->rawColumns(['action'])
                 ->make(true);    
+  }
+  function salelist(Request $request){
+    $salelistModule =new salelistModule();
+    $data =  $salelistModule->salelist() ;
+    
+   return Datatables::of($data)
+            ->make(true); 
   }
   //구매예약취소
   function cancelReservation(Request $request){

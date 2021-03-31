@@ -78,7 +78,8 @@ Route::prefix('/adm')->name('admin.')->group(function () {
   //예약리스트
   Route::get('/reservation', 'App\Http\Controllers\Admin\ProductController@reservation')->name('reservation');
   Route::get('/reservation/list', 'App\Http\Controllers\Admin\ProductController@reservationList')->name('reservation.list');
-  
+  Route::get('/reservation/salelist', 'App\Http\Controllers\Admin\ProductController@salelist')->name('reservation.salelist');
+
   Route::post('/api/matching/adm', 'App\Http\Controllers\Admin\ProductController@matchingAdmin')->name('matching.adm');//관리자매칭
   Route::post('/api/matching/cancel_reservation', 'App\Http\Controllers\Admin\ProductController@cancelReservation')->name('matching.cancel.reservation');//구매예약삭제,취소
   

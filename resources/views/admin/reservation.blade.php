@@ -70,6 +70,23 @@
               </tr>
             </thead>
           </table>
+          
+          <table class="table table-striped" id="saletable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th class="text-center">판매자</th>
+                <th class="text-center">상품</th>
+                <th class="text-center">신청갯수</th>
+                <th class="text-center">판매자 {{$siteconfig->point_name}}</th>
+                
+                <th class="text-center">등록일</th>
+                <th class="text-center">매칭</th>
+                <th class="text-center">취소</th>
+              </tr>
+            </thead>
+          </table>
+          
         </div>
     
     
@@ -81,6 +98,7 @@
    
 <script>
   var reserv ;
+  var saletable;
   function searchdt(e){
     if (e.keyCode == 13){
       reserv.ajax.reload(null, false);
@@ -166,6 +184,58 @@
         },
               
       });
+    
+    
+    
+    
+saletable = $('#saletable').DataTable({
+        "processing": true,
+        "serverSide": true,
+        "lengthMenu": ['All'],
+        //"order": [[ 0, "desc" ]],
+        "ajax": {
+          'url' : "/adm/reservation/salelist" ,
+          'data' : function (data){
+          }
+        },
+        "columnDefs": [
+          {"targets": [ 0 ],"visible": false,"searchable": false},
+          {"targets": [ 1 ],"searchable": true,"sortable":true, className:'text-left'},
+          {"targets": [ 2 ],"searchable": true,"sortable":true, className:'text-center'},
+          {"targets": [ 3 ],"searchable": false,"sortable":true, className:'text-center'},
+          {"targets": [ 4 ],"searchable": false,"sortable":true, className:'text-center'},
+          {"targets": [ 5 ],"searchable": false,"sortable":false, className:'text-center'},
+          {"targets": [ 6 ],"searchable": false,"sortable":false, className:'text-center'},
+          {"targets": [ 7 ],"searchable": false,"sortable":false, className:'text-center'},
+        ],
+        "columns" : [
+          {"data" : "id"},
+          {"data" : "phone"},
+          {"data" : "product_name"},
+          {"data" : "amount"},
+          {"data" : "point"},
+
+          {"data" : "saledate",},
+          {"data": "id",
+          },
+          {"data": "id",
+          }          
+        ],
+        "initComplete": function(settings, json) {
+            //$("#saletable_filter").hide();
+            var textBox = $('#saletable_filter label input');
+            textBox.unbind();
+            textBox.bind('keyup input', function(e) {
+                if(e.keyCode == 8 && !textBox.val() || e.keyCode == 46 && !textBox.val()) {
+                    // do nothing ¯\_(ツ)_/¯
+                } else if(e.keyCode == 13 || !textBox.val()) {
+                    reserv.search(this.value).draw();
+                }
+            });          
+        },
+              
+      });
+    
     });
   
   // 관리자 매칭
