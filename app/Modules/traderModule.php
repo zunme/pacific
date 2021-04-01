@@ -15,14 +15,20 @@ use App\Models\ProductItemHistory;
 use App\Models\PointHistory;
 use App\Models\Recommender;
 
+use App\Models\BuyReservation;
+
 use App\Models\SiteConfig;
+use App\Exceptions\CustomException;
 
 class traderModule {
   protected $trade;
   protected $items,$product, $calc_fee, $calc_profit ;
   
-  public function __construct( $trade_id, $seller_id) {
-    $trade = Trading::where( 'id', $trade_id)->where('seller_user_id', $seller_id )->where('trading_status', 'AWAITING')->first();
+  public function __construct( $trade_id, $seller_id=null) {
+    if( $seller_id) $trade = Trading::where( 'id', $trade_id)->where('seller_user_id', $seller_id )->where('trading_status', 'AWAITING')->first();
+    else $trade = Trading::where( 'id', $trade_id)->where('trading_status', 'AWAITING')->first();
+    if( !$trade) throw new CustomException("거래정보를 찾을 수 없습니다(1).");
+    
     $items = ProductItem::where( 'user_id', $trade->seller_user_id)->where('trading_reserved_id', $trade->id )->where('is_use', 'Y');
     $this->product = Product::where('id', $trade->product_id )->first();
     
@@ -31,7 +37,19 @@ class traderModule {
     $this->calc_profit = $this->calcProfit(config("sitedata.calc_profit"));
     $this->calc_fee = $this->calcProfit(config("sitedata.calc_fee"));
   }
-  
+  public function cancel(){
+    \DB::beginTransaction();
+    try{
+      $this->trade->trading_status = 'N';
+      $this->trade->save();
+      BuyReservation::where('id', $this->trade->reservation_id)->update(['reservation_status'=>'N']);
+      $items = ProductItem::where(['trading_reserved_id'=> $this->trade->id])->update(['trading_reserved_id'=>0]);
+      \DB::commit();
+    }catch ( \Exceptions $e){
+      \DB::rollback();
+      throw $e;
+    }
+  }
   public function trade() {   
     if( !$this->trade ) return ['code'=>'Error', 'msg'=>'거래내역을 찾을 수 없습니다.'];
     if( $this->items->count() < 1) return ['code'=>'Error', 'msg'=>'거래가능한 상품을 찾을 수 없습니다.'];
@@ -76,7 +94,7 @@ class traderModule {
       return ['code'=>'Success', 'msg'=>'거래가 완료되었습니다.']; 
     } catch ( \Exception $e ){
       \DB::rollback();
-      return ['code'=>'Error', 'msg'=>'잠시후에 이용해주세요.'];
+      return ['code'=>'Error', 'msg'=>'잠시후에 이용해주세요.','data'=>$e];
     }
   }
   

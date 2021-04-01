@@ -36,14 +36,18 @@ class ProductController extends Controller
   }
   
   function reservationList (Request $request){
+    $siteconfig = $this->siteconfig;
     $data = BuyReservation::
             select('buy_reservations.id', 'buy_reservations.user_id','buy_reservations.amount','buy_reservations.reservation_status','buy_reservations.created_at',
                    'products.product_name',
-                   'users.phone', 'users.point'
+                   'users.phone', 'users.point',
+                   \DB::raw( " if (  penalty_sale >= ".$siteconfig->penalty_sale." OR penalty_purchase >= ".$siteconfig->penalty_purchase." OR users.islock='Y' OR login_available ='M' , 'lock','unlock') as lockuser ")
                   )
             ->join ('products', 'buy_reservations.product_id','=','products.id')
             ->join ('users', 'buy_reservations.user_id','=','users.id')
             ->where('reservation_status','R')
+            //->where( 'penalty_sale','<',$siteconfig->penalty_sale )->where( 'penalty_purchase','<' , $siteconfig->penalty_purchase )
+            //->where(['users.islock'=>'Y','login_available'=>'N' ])
             ;
     if( $request->search_keyword){
       $data->where('users.phone','like', '%'.$request->search_keyword.'%');

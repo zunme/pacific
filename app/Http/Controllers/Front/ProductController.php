@@ -104,7 +104,7 @@ class ProductController extends Controller
         LEFT JOIN (
           SELECT 
             product_id,
-            count(1) reserv
+            sum(amount) reserv
           FROM buy_reservations a
           WHERE user_id = ".$user->id." 
             AND reservation_status = 'R'
@@ -259,7 +259,7 @@ class ProductController extends Controller
         $product->reserv = $tmp['p'.$product->id];
       }
     }
-    return view('salelist', compact(['user','products','siteconfig']));
+    return view('salelist', compact(['user','products','siteconfig','saleNeedPoint']));
   }
   function saleHistory (Request $request){
     $user = Auth::user();

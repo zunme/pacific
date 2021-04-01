@@ -138,7 +138,7 @@ from
 		AND users.islock = 'N' AND users.login_available='Y'
 		AND DATEDIFF( NOW() , product_items.buy_date) - product_items.holding_period > products.period
 		AND product_items.trading_reserved_id < 1
-		AND users.id IN(6)
+		#AND users.id IN(6)
 		#AND users.id = 6
 ) tmp
 GROUP BY user_id, saledate, product_id

@@ -16,13 +16,20 @@
           <h2>판매현황</h2>
 
           <div class="row mt-4">
-            <div class="col-md-12">
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="">보유 {{$siteconfig->point_name}}</label>
                 <div class="form-control">{{$user->point}}</div>
               </div>
             </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="">판매 필요 {{$siteconfig->point_name}}</label>
+                <div class="form-control">{{$saleNeedPoint->need_point}}</div>
+              </div>  
+            </div>
           </div>
+       
 
           <ul class="row history-product">
             @foreach( $products as $product )

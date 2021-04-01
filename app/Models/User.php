@@ -64,7 +64,8 @@ class User extends Authenticatable
     
     
     $beforePoint = $this->point;
-    $pointHistory = ['user_id'=>$this->id , 'point_type'=> $type,
+    // 'user_id'=>$this->id ,
+    $pointHistory = [ 'user_id'=>$this->id ,'point_type'=> $type,
                  'amount'=>$point ,'before_amount'=> $this->point, 'after_amount'=>$this->point +  $point,
                  'trade_id'=>$trade_id];
     
@@ -76,6 +77,7 @@ class User extends Authenticatable
       return true;
     } catch ( \Exception $e ){
        \DB::rollback();
+      throw $e;
       return false;
     }
   }

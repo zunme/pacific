@@ -210,28 +210,15 @@ class AdminController extends Controller
   function addPenalty(Request $request , $penaltytype){
     $user = User::findOrFail($request->id);
     $data = ['user_id'=>$user->id, 'penalty_type'=> $penaltytype ];
-     \DB::beginTransaction();
-		try {
-      if( $penaltytype == 'sale'){
-        $user->increment('penalty_sale');
-        $user->increment('penalty_total');
-      }else if( $penaltytype == 'purchase'){
-        $user->increment('penalty_purchase');
-        $user->increment('penalty_total');
-      }else if( $penaltytype == 'reset'){
-        $user->update(['penalty_sale'=>0 , 'penalty_purchase'=>0 ]);
-      }else if ( $penaltytype == 'lock'){
-        $user->update(['islock'=>'Y' ]);
-      }else return $this->error();
-      
-      $log = PenaltyHistory::create( $data );
-      \DB::commit();
+    $penalty = new PenaltyHistory();
+    try{
+      $ret = $penalty->penalty( $request->id, $penaltytype);
     } catch (\Exception $e) {
-		  \DB::rollback();
-      return $this->error();
-		}
+       return $this->error($e->getMessage(), 422);  
+    }
     return $this->success([],'패널티 적용 완료');
   }
+  
   /* 회원관련 포인트*/
   function pointprc(Request $request , $pointprc){
     $siteconfig = SiteConfig::first();

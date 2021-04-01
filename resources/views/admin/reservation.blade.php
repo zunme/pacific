@@ -81,8 +81,8 @@
                 <th class="text-center">판매자 {{$siteconfig->point_name}}</th>
                 
                 <th class="text-center">등록일</th>
-                <th class="text-center">매칭</th>
-                <th class="text-center">취소</th>
+                <th class="text-center">랜덤매칭</th>
+                <th class="text-center">지정매칭</th>
               </tr>
             </thead>
           </table>
@@ -157,6 +157,7 @@
           },
           {"data": "id",
              "render": function( data, type, row, meta) {
+               if( row.lockuser == 'lock') return `계정블럭중`
                return `
 <!--<button class="btn btn-sm btn-primary">랜덤</button>
 <button class="btn btn-sm btn-success">유저</button>-->

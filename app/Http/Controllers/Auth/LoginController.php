@@ -79,11 +79,12 @@ class LoginController extends Controller
                 return redirect()->to($redirect_url);
             }
         } else {
-            $user = User::where('email', $input['email'])->first();
+            return back()->withInput();
+            $user = User::where('phone', $input['phone'])->first();
             if (empty($user)) {
-                return response()->json(['errors' => ['email' => ['사용자를 찾을 수 없습니다.']]], 422);
+                return response()->json(['errors' => ['phone' => ['사용자를 찾을 수 없습니다.']]], 422);
             } else {
-                return response()->json(['errors' => ['email' => ['이메일과 비밀번호를 확인해주세요.']]], 422);
+                return response()->json(['errors' => ['phone' => ['전화번호와 비밀번호를 확인해주세요.']]], 422);
             }
         }
     }

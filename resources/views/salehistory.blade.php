@@ -14,7 +14,7 @@
                     <td>{{$r_row->saledate}}</td>
                     <td><span class="text-danger">판매</span></td>
                     <td>{{$r_row->product_name}}</td>
-                    <td>판매</td>
+                    <td>판매신청</td>
                   </tr>
                   @endforeach
                   @foreach ( $data as $row)

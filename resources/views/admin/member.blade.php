@@ -87,10 +87,8 @@
           
           {"data" : "islock", 
            'render' : function( data, type, row, meta) {
-             var lock = false;
-             if ( row.islock =='Y' || row.penalty_sale >= {{$siteconfig->penalty_sale}} || row.penalty_purchase >=  {{$siteconfig->penalty_purchase}}  ) lock = true;
-             
-             if( lock) return '<i class="fas fa-lock color-red"></i>'
+             console.log ( row.penalty_sale, {{$siteconfig->penalty_sale}}, (row.penalty_sale >= {{$siteconfig->penalty_sale}}) )
+             if ( row.islock =='Y' || row.penalty_sale >= {{$siteconfig->penalty_sale}} || row.penalty_purchase >=  {{$siteconfig->penalty_purchase}}  ) return '<i class="fas fa-lock color-red"></i>'; 
              else return ''
 
             }
